@@ -12,6 +12,45 @@ graph LR
     Kafka -->|Consumes| Iceberg[Kafka Connect Iceberg]
     Iceberg -->|Store data| S3[S3 Lake House]
 ```
+### Services Communication
+
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart TD
+   subgraph INFRASTRUCTURE["INFRASTRUCTURE"]
+         postgres[("Postgres")]
+         broker[("Kafka Broker")]
+         minio[("MinIO")]
+         mc[("MinIO Client")]
+   end
+   subgraph CONNECT_LAYER["CONNECT_LAYER"]
+         kafka_connect["Debezium Connect"]
+         connect["Iceberg Kafka Connect"]
+         schema_registry["Schema Registry"]
+   end
+   subgraph VISUALIZATION["VISUALIZATION"]
+         kafka_ui["Kafka UI"]
+   end
+   subgraph ICEBERG_SPARK["ICEBERG_SPARK"]
+         rest["Iceberg REST Catalog"]
+         spark_iceberg["Spark Iceberg"]
+   end
+   subgraph DATA_PRODUCER["DATA_PRODUCER"]
+         data_producer["Data Producer"]
+   end
+      mc --> minio
+      kafka_connect --> broker & postgres
+      connect --> broker & schema_registry
+      schema_registry --> broker
+      kafka_ui --> broker & kafka_connect & connect
+      rest --> minio
+      spark_iceberg --> rest & minio
+      data_producer --> postgres
+
+```
 
 ## Components
 

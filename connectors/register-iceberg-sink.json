@@ -1,7 +1,7 @@
 {
     "name": "iceberg-sink",
     "config": {
-        "connector.class": "io.tabular.iceberg.connect.IcebergSinkConnector",
+        "connector.class": "org.apache.iceberg.connect.IcebergSinkConnector",
         "topics": "ice.public.customers,ice.public.products,ice.public.orders,ice.public.order_items",
         "iceberg.catalog.type": "rest",
         "iceberg.catalog.uri": "http://rest:8181",
