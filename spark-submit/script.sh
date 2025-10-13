@@ -1,0 +1,1 @@
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.6 /home/iceberg/notebooks/notebooks/kafka_to_iceberg.py

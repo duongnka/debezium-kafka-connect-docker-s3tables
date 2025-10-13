@@ -1,1 +1,4 @@
 /.DS_Store
+notebooks/metastore_db
+notebooks/*.log
+notebooks/.ipynb_checkpoints

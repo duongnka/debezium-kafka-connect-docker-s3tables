@@ -64,6 +64,20 @@ RUN curl -s https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-gcp-bundle
 # Download Azure bundle
 RUN curl -s https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-azure-bundle/${ICEBERG_VERSION}/iceberg-azure-bundle-${ICEBERG_VERSION}.jar -Lo /opt/spark/jars/iceberg-azure-bundle-${ICEBERG_VERSION}.jar
 
+# Download spark sql kafka
+# RUN curl -s https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/${SPARK_VERSION}/spark-sql-kafka-0-10_2.12-${SPARK_VERSION}.jar -Lo /opt/spark/jars/spark-sql-kafka-0-10_2.12-${SPARK_VERSION}.jar
+
+# Download spark streaming kafka
+# RUN curl -s https://repo1.maven.org/maven2/org/apache/spark/spark-streaming_2.13/${SPARK_VERSION}/spark-streaming_2.13-${SPARK_VERSION}.jar -Lo /opt/spark/jars/spark-streaming_2.13-${SPARK_VERSION}.jar
+
+# Download AWS + SDK for MinIO access
+RUN curl -s https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.4/hadoop-aws-3.3.4.jar -Lo /opt/spark/jars/hadoop-aws-3.3.4.jar
+
+RUN curl -s https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.367/aws-java-sdk-bundle-1.12.367.jar -Lo /opt/spark/jars/aws-java-sdk-bundle-1.12.367.jar
+
+RUN curl -s https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.5.2/kafka-clients-3.5.2.jar -Lo /opt/spark/jars/kafka-clients-3.5.2.jar
+
+
 # Install AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
  && unzip awscliv2.zip \
