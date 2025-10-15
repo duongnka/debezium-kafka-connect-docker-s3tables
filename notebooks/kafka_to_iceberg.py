@@ -13,6 +13,7 @@ import base64
 spark = (
     SparkSession.builder
     .appName("KafkaToIcebergOrders")
+    .config("spark.sql.catalog.rest.uri", "http://rest:8181")
     .getOrCreate()
 )
 
