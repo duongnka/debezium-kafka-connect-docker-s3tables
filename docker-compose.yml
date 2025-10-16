@@ -5,7 +5,29 @@ networks:
   iceberg_net:
 
 services:
+
 # ─── Infrastructure ───────────────────────────────
+  cassandra:
+    image: cassandra:5.0
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    networks:
+      iceberg_net:
+    environment:
+      - CASSANDRA_CLUSTER_NAME=TestCluster
+      - CASSANDRA_NUM_TOKENS=16
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - HEAP_NEWSIZE=128M
+      - MAX_HEAP_SIZE=512M
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe cluster'"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+
   postgres:
     image: postgres:17.4
     container_name: postgres
@@ -36,7 +58,6 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
-      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
@@ -115,7 +136,6 @@ services:
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_REST_PORT: 8083
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
-      # CONNECT_CONTROLLER_QUORUM_VOTERS: '1@@broker:29093'
 
 
   connect:
@@ -214,7 +234,6 @@ services:
 
 
   spark-iceberg:
-    # image: tabulario/spark-iceberg:3.5.5_1.8.1
     container_name: spark-iceberg
     build: spark/
     networks:
