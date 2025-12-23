@@ -13,6 +13,10 @@ import base64
 spark = (
     SparkSession.builder
     .appName("KafkaToIcebergOrders")
+    .config("spark.metrics.conf.*.source.jvm.class", "org.apache.spark.metrics.source.JvmSource")
+    .config("spark.metrics.conf.*.sink.prometheusServlet.class", "org.apache.spark.metrics.sink.PrometheusServlet")
+    .config("spark.metrics.conf.*.sink.prometheusServlet.path", "/metrics/prometheus")
+    .config("spark.sql.streaming.metricsEnabled", "true")
     .config("spark.sql.catalog.rest.uri", "http://rest:8181")
     .getOrCreate()
 )

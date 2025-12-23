@@ -214,7 +214,6 @@ services:
 
 
   spark-iceberg:
-    # image: tabulario/spark-iceberg:3.5.5_1.8.1
     container_name: spark-iceberg
     build: spark/
     networks:
@@ -234,6 +233,7 @@ services:
       - 8082:8080
       - 10000:10000
       - 10001:10001
+      - 4040:4040
 
 # ─── Data Generator ───────────────────────────────
   data-producer:
@@ -265,3 +265,30 @@ services:
       timeout: 10s
       retries: 3
 
+
+# ─── Data Generator ───────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    networks:
+      iceberg_net:
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - spark-iceberg
+
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      iceberg_net:
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
